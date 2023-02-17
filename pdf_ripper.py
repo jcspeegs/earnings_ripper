@@ -21,6 +21,16 @@ def verbose_get(func):
 requests.get = verbose_get(requests.get)
 
 
+def write_file(directory, filename: str, content: bytes, dry_run=False):
+    ''' Write file and create directory if it does not exist'''
+    logger = logging.getLogger(__name__)
+    file = os.path.join(directory, filename)
+    logger.info(f'writing {file}')
+    if dry_run is not True:
+        os.makedirs(directory, exist_ok=True)
+        with open(file, 'wb') as fl:
+            fl.write(content)
+
 def cleanse_filename(filename: str):
     replace = ' ()-_'
     pattern = f"[{''.join([re.escape(char) for char in replace])}]+"
@@ -73,8 +83,6 @@ class PDFripper():
                  requests.get(self.base_url+pdf.get('href'),
                               dry_run=self.dry_run)) for pdf in pdfs)
         for label, pdf in pdfs:
-            file = os.path.join(path, cleanse_filename(label))
-            self.logger.info(f'writing {file}')
-            if self.dry_run is not True:
-                with open(file, 'wb') as fl:
-                    fl.write(pdf.content)
+            filename = cleanse_filename(label)
+            content = pdf.content if self.dry_run is False else None
+            write_file(path, filename, content, dry_run=self.dry_run)
