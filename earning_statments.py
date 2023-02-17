@@ -15,7 +15,7 @@ def parse_yaml(file='metadata.yaml') -> dict:
 def main():
     logging.basicConfig(level=logging.INFO)
     DRY_RUN = True
-    OUT = '~/Downloads'
+    OUT = os.path.join(os.getenv('HOME'), 'Downloads')
 
     metadata = parse_yaml()
     sites = {k: Rip(metadata[k].get('url'), dry_run=DRY_RUN) for k in metadata}
