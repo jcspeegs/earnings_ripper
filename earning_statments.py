@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-from pdf_ripper import PDFripper as rip
+import logging
+from pdf_ripper import PDFripper as Rip
 import yaml
 
 
@@ -11,8 +12,11 @@ def parse_yaml(file='metadata.yaml') -> dict:
 
 
 def main():
+    logging.basicConfig(level=logging.INFO)
+    dry_run = False
+
     metadata = parse_yaml()
-    sites = {k: rip(metadata[k].get('url')) for k in metadata}
+    sites = {k: Rip(metadata[k].get('url'), dry_run=dry_run) for k in metadata}
     for name, site in sites.items():
         site.extract('output')
 

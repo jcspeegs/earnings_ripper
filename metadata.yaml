@@ -1,3 +1,7 @@
 wfc:
   url: https://www.wellsfargo.com/about/investor-relations/quarterly-earnings/
   description: Wells Fargo
+usb:
+  url: https://ir.usbank.com/investor-relations/financial-information
+  description: U.S. Bank
+
