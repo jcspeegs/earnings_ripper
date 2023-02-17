@@ -1,40 +1,11 @@
 import logging
-import functools
 import requests
-import os
 from urllib.parse import urlsplit, urlunsplit
-import re
 from bs4 import BeautifulSoup as bs
-
-
-def verbose_get(func):
-    @functools.wraps(func)
-    def wrapper(url, dry_run=False, *args, **kwargs):
-        logging.info(f'Ripping {url}')
-        if dry_run is True:
-            return url
-        else:
-            return func(url, *args, **kwargs)
-    return wrapper
+from utils import verbose_get, write_file, cleanse_filename
 
 
 requests.get = verbose_get(requests.get)
-
-
-def write_file(directory, filename: str, content: bytes, dry_run=False):
-    ''' Write file and create directory if it does not exist'''
-    logger = logging.getLogger(__name__)
-    file = os.path.join(directory, filename)
-    logger.info(f'writing {file}')
-    if dry_run is not True:
-        os.makedirs(directory, exist_ok=True)
-        with open(file, 'wb') as fl:
-            fl.write(content)
-
-def cleanse_filename(filename: str):
-    replace = ' ()-_'
-    pattern = f"[{''.join([re.escape(char) for char in replace])}]+"
-    return re.sub(pattern, '_', filename).strip('_').lower()
 
 
 class PDFripper():
