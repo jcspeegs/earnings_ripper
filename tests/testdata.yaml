@@ -1,3 +1,6 @@
 CleanseFilename:
   test_cleanse_filename:
-    'apary:w k_a-a)a(a a'
+    'a:k_a-a)a(a a': 'a_a_a_a_a_a_a'
+    '  :()aa)(: ': 'aa'
+    '))a  a::': 'a_a'
+    'ABC': 'abc'

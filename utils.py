@@ -1,6 +1,6 @@
 import logging
 from functools import wraps
-from os.path import join, makedirs
+import os
 import re
 
 
@@ -24,9 +24,9 @@ def cleanse_filename(filename: str):
 def write_file(directory, filename: str, content: bytes, dry_run=False):
     ''' Write file and create directory if it does not exist'''
     logger = logging.getLogger(__name__)
-    file = join(directory, filename)
+    file = os.path.join(directory, filename)
     logger.info(f'writing {file}')
     if dry_run is not True:
-        makedirs(directory, exist_ok=True)
+        os.makedirs(directory, exist_ok=True)
         with open(file, 'wb') as fl:
             fl.write(content)
