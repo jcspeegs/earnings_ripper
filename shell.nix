@@ -8,6 +8,7 @@ let
     flake8
     beautifulsoup4
     ipykernel
+    pytest
   ];
   py = pkgs.python311.withPackages pyPacks;
 in py.env
