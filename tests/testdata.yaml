@@ -1,6 +1,10 @@
 CleanseFilename:
   test_cleanse_filename:
-    'a:k_a-a)a(a a': 'a_a_a_a_a_a_a'
-    '  :()aa)(: ': 'aa'
-    '))a  a::': 'a_a'
-    'ABC': 'abc'
+    - id: Special Characters
+      test: {'a:k_a-a)a(a a': 'a:k_a_a_a_a_a'}
+    - id: Strip
+      test: {'  -()aa)(- ': 'aa'}
+    - id: Multiples
+      test: {'a))a  a--a': 'a_a_a_a'}
+    - id: Lowcase
+      test: {'ABC': 'abc'}
