@@ -26,22 +26,27 @@ class TestWriteFile():
     @pytest.fixture
     def write(self, tmp_path, dry_run):
         new_dir = tmp_path / 'new_dir'
+        file = new_dir / 'file.tmp'
         write_file(new_dir, 'file.tmp', b'content', dry_run)
-        yield new_dir
+        yield {'dir': new_dir, 'file': file}
 
     @pytest.mark.parametrize('dry_run', [False])
     def test_create_directory(self, write):
-        ''' - create directory'''
-        assert write.exists()
+        ''' create directory'''
+        assert write.get('dir').exists()
 
-    # def test_write_file():
-    #     ''' - write file'''
-    #     pass
+    @pytest.mark.parametrize('dry_run', [True])
+    def test_dryrun_directory(self, write):
+        ''' dry_run blocks directory creation'''
+        assert not write.get('dir').exists()
 
-    # def test_dryrun_directory():
-    #     ''' - dry_run blocks directory creation'''
-    #     pass
+    @pytest.mark.parametrize('dry_run', [False])
+    def test_write_file(self, write):
+        ''' write file'''
+        assert write.get('file').exists()
 
-    # def test_dryrun_file():
-    #     ''' - dry_run blocks file creation'''
-    #     pass
+    @pytest.mark.parametrize('dry_run', [True])
+    def test_dryrun_file(self, write):
+        ''' - dry_run blocks file creation'''
+        assert not write.get('file').exists()
+
